@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda Pribadi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset dan Pengaturan Dasar */
+        :root {
+            --glassmorphism-bg: rgba(255, 255, 255, 0.1);
+            --glassmorphism-border: rgba(255, 255, 255, 0.2);
+            --hover-bg: rgba(255, 255, 255, 0.2);
+            --active-edit-bg: rgba(40, 90, 235, 0.4);
+            --active-edit-border: rgba(40, 90, 235, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Gaya Kustom Asli */
+        .glassmorphism {
+            background: var(--glassmorphism-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glassmorphism-border);
+            transition: background-color 0.3s;
+        }
+
+        .icon-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .icon-container:hover {
+            transform: scale(1.1);
+        }
+        .youtube { background-color: #FF0000; }
+        .facebook { background-color: #1877F2; }
+        .instagram {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        .add { background-color: #E0E0E0; color: #333; }
+        
+        .hidden { display: none !important; }
+
+        .active-edit {
+            background: var(--active-edit-bg);
+            border-color: var(--active-edit-border);
+        }
+
+        .edit-link-icon {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #285aeb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .edit-link-icon:hover {
+            transform: scale(1.2);
+        }
+
+        /* Tata Letak Utama (Terjemahan dari Tailwind) */
+        .page-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 2rem; /* sm:p-8 */
+        }
+
+        #edit-bg-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #edit-bg-btn:hover { background-color: var(--hover-bg); }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .navbar {
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            font-size: 1.125rem;
+        }
+
+        .navbar li {
+            margin-right: 1.5rem;
+        }
+        .navbar li:last-child {
+            margin-right: 0;
+        }
+        
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        
+        .navbar .font-bold {
+            font-weight: 700;
+        }
+
+        #clock-container {
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            text-align: right;
+        }
+
+        #clock {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        #location-weather {
+            font-size: 0.875rem;
+        }
+        
+        /* Konten Utama */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .main-grid {
+            width: 100%;
+            max-width: 80rem; /* max-w-7xl */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) { /* md breakpoint */
+            .main-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .grid-item {
+            display: flex;
+            align-items: center;
+        }
+        .grid-item.justify-start { justify-content: flex-start; }
+        .grid-item.justify-center { justify-content: center; }
+        .grid-item.justify-end { justify-content: flex-end; }
+        .grid-item-center-col {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 20rem; /* max-w-xs */
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid #9CA3AF; /* border-gray-400 */
+            padding-bottom: 0.5rem;
+        }
+        
+        .motivation-text {
+            font-size: 0.875rem;
+            line-height: 1.625;
+        }
+        
+        .welcome-card {
+            padding: 1rem;
+            text-align: center;
+            border-radius: 0.75rem;
+        }
+        .welcome-card h1 { font-size: 1.25rem; }
+        .welcome-card p { font-size: 1rem; }
+        
+        #search-form {
+            width: 100%;
+            max-width: 32rem; /* max-w-lg */
+            position: relative;
+        }
+        #search-form .fa-search {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF; /* text-gray-400 */
+        }
+        
+        #search-input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1F2937; /* text-gray-800 */
+            border-radius: 9999px;
+            padding: 0.75rem 1rem 0.75rem 3rem; /* py-3 pl-12 pr-4 */
+            border: none;
+        }
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #60A5FA; /* ring-2 focus:ring-blue-400 */
+        }
+
+        .todolist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .todolist-header button:hover { color: #D1D5DB; }
+
+        #todo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        #todo-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-checkbox {
+            height: 1.25rem;
+            width: 1.25rem;
+            background-color: transparent;
+            border: 1px solid white;
+            color: #3B82F6; /* text-blue-500 */
+            border-radius: 0.25rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .form-checkbox:checked {
+             background-color: currentColor;
+        }
+        .form-checkbox:focus {
+             box-shadow: none; /* focus:ring-0 */
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .footer-center {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        #social-icons-container {
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .footer-icon-btn {
+            border-radius: 9999px;
+            padding: 0.75rem;
+            height: 3rem;
+            width: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .footer-icon-btn:hover { background-color: var(--hover-bg); }
+        .footer-icon-btn i { font-size: 1.5rem; }
+
+        /* Modal */
+        #link-modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .modal-content {
+            background-color: rgba(31, 41, 55, 0.8); /* bg-gray-800/80 */
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 28rem; /* max-w-md */
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1); /* shadow-lg */
+        }
+        .modal-content h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .modal-group { margin-bottom: 1rem; }
+        .modal-group:last-of-type { margin-bottom: 1.5rem; }
+
+        .modal-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .modal-input {
+            width: 100%;
+            background-color: #374151; /* bg-gray-700 */
+            border: 1px solid #4B5563; /* border-gray-600 */
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+        }
+        .modal-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #3B82F6; /* ring-2 focus:ring-blue-500 */
+        }
+
+        .modal-color-input {
+             width: 100%;
+             height: 2.5rem;
+             padding: 0.25rem;
+             background-color: #374151;
+             border: 1px solid #4B5563;
+             border-radius: 0.5rem;
+             cursor: pointer;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-delete {
+            background-color: #DC2626; /* bg-red-600 */
+            color: white;
+        }
+        .btn-delete:hover { background-color: #B91C1C; } /* hover:bg-red-700 */
+        
+        .btn-cancel {
+            background-color: #4B5563; /* bg-gray-600 */
+            color: white;
+        }
+        .btn-cancel:hover { background-color: #374151; } /* hover:bg-gray-700 */
+
+        .btn-submit {
+             background-color: #2563EB; /* bg-blue-600 */
+             color: white;
+        }
+        .btn-submit:hover { background-color: #1D4ED8; } /* hover:bg-blue-700 */
+
+
+    </style>
+</head>
+<body style="background-image: url('img/background/futuristic-moon-background.jpg');">
+
+    <div class="page-container">
+        <div id="edit-bg-btn" class="hidden glassmorphism">
+            <i class="fa fa-image" style="margin-right: 0.5rem;"></i> Ganti Latar
+        </div>
+
+        <header class="header">
+            <nav class="navbar glassmorphism">
+                <ul>
+                    <li><a href="#" class="font-bold">Beranda</a></li>
+                    <li><a href="#">Bookmark</a></li>
+                    <li><a href="#">Tugas</a></li>
+                    <li><a href="#">Diskusi</a></li>
+                </ul>
+            </nav>
+            <div id="clock-container" class="glassmorphism">
+                <div id="clock">00:00</div>
+                <div id="location-weather">lokasi, cuaca</div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="main-grid">
+                <div class="grid-item justify-start">
+                    <div class="card glassmorphism">
+                        <h2 class="card-title">Motivasi</h2>
+                        <p class="motivation-text">
+                            Manfaatkan setiap hari sebagai kesempatan baru untuk berkembang, karena kegagalan hanyalah bagian dari proses dan kesuksesan adalah hasil dari usaha serta ketekunan yang konsisten.
+                        </p>
+                    </div>
+                </div>
+                <div class="grid-item justify-center grid-item-center-col">
+                    <div class="welcome-card glassmorphism">
+                        <h1>Hallo, Tuan Cecep!</h1>
+                        <p>Aktivitas apa yang akan kita lakukan hari ini?</p>
+                    </div>
+                    <form id="search-form">
+                        <div style="position: relative;">
+                            <i class="fa fa-search"></i>
+                            <input type="text" id="search-input" placeholder="Telusuri Google atau ketik URL">
+                        </div>
+                    </form>
+                </div>
+                <div class="grid-item justify-end">
+                    <div class="card glassmorphism">
+                         <div class="card-title todolist-header">
+                            <h2 style="font-size: 1.25rem; font-weight: 700; border: none; margin: 0; padding: 0;">TodoList Daily!</h2>
+                            <button style="background: none; border: none; color: white; cursor: pointer;"><i class="fa fa-pencil"></i></button>
+                        </div>
+                        <ul id="todo-list">
+                             <li><label for="task1">Report</label><input type="checkbox" id="task1" class="form-checkbox"></li>
+                             <li><label for="task2">Stock Opname</label><input type="checkbox" id="task2" class="form-checkbox"></li>
+                             <li><label for="task3">Absensi</label><input type="checkbox" id="task3" class="form-checkbox"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+             <div class="footer-center">
+                <div id="social-icons-container" class="glassmorphism">
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-youtube" data-bg="#FF0000">
+                        <div class="icon-container youtube"><i class="fab fa-youtube"></i></div>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-facebook-f" data-bg="#1877F2">
+                        <div class="icon-container facebook"><i class="fab fa-facebook-f"></i></div>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-instagram" data-bg="radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)">
+                        <div class="icon-container instagram"><i class="fab fa-instagram"></i></div>
+                    </a>
+                    <div id="add-link-btn" class="icon-container add hidden"><i class="fa fa-plus"></i></div>
+                </div>
+             </div>
+             <div class="footer-right">
+                <div id="toggle-edit-mode-btn" class="footer-icon-btn glassmorphism">
+                    <i class="fa fa-pencil"></i>
+                </div>
+                <div class="footer-icon-btn glassmorphism">
+                    <i class="fa fa-cog"></i>
+                </div>
+             </div>
+        </footer>
+    </div>
+
+    <div id="link-modal" class="hidden">
+        <div class="modal-content">
+            <h2 id="modal-title">Tambah Tautan Baru</h2>
+            <form id="link-form">
+                <div class="modal-group">
+                    <label for="link-url" class="modal-label">URL</label>
+                    <input type="text" id="link-url" class="modal-input" placeholder="https://contoh.com" required>
+                </div>
+                <div class="modal-group">
+                    <label for="link-icon" class="modal-label">Kelas Ikon (Font Awesome)</label>
+                    <input type="text" id="link-icon" class="modal-input" placeholder="fab fa-twitter" required>
+                </div>
+                <div class="modal-group">
+                    <label for="link-bg" class="modal-label">Warna Latar</label>
+                    <input type="color" id="link-bg" class="modal-color-input" value="#333333">
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <button type="button" id="delete-link-btn" class="btn btn-delete hidden">
+                            <i class="fa fa-trash" style="margin-right: 0.5rem;"></i>Hapus
+                        </button>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" id="cancel-btn" class="btn btn-cancel">Batal</button>
+                        <button type="submit" class="btn btn-submit">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let currentEditingLink = null; 
+
+        const modal = document.getElementById('link-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const linkForm = document.getElementById('link-form');
+        const urlInput = document.getElementById('link-url');
+        const iconInput = document.getElementById('link-icon');
+        const bgInput = document.getElementById('link-bg');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const deleteBtn = document.getElementById('delete-link-btn');
+        const addLinkBtn = document.getElementById('add-link-btn');
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+
+        function fetchWeather() {
+            document.getElementById('location-weather').textContent = 'Bandung, Cerah';
+        }
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                const url = normalizeUrl(query, true);
+                window.open(url, '_blank');
+                document.getElementById('search-input').value = '';
+            }
+        }
+
+        async function setRandomBackground() {
+            try {
+                const response = await fetch('https://source.unsplash.com/1920x1080/?city,architecture,nature,landscape');
+                if (response.url) {
+                    document.body.style.backgroundImage = `url('${response.url}')`;
+                }
+            } catch (error) {
+                console.error("Gagal memuat latar belakang:", error);
+            }
+        }
+        
+        function normalizeUrl(url, isSearch = false) {
+            if (/^https?:\/\//.test(url)) {
+                return url;
+            }
+            if (!isSearch && /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(url)) {
+                return `https://${url}`;
+            }
+            if (isSearch && /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(url)) {
+                 return `https://${url}`;
+            }
+            return isSearch ? `https://www.google.com/search?q=${encodeURIComponent(url)}` : `https://${url}`;
+        }
+
+        function createLinkElement(url, iconClass, bgColor) {
+            const linkElement = document.createElement('a');
+            linkElement.href = normalizeUrl(url);
+            linkElement.target = '_blank';
+            linkElement.rel = 'noopener noreferrer';
+            linkElement.dataset.icon = iconClass;
+            linkElement.dataset.bg = bgColor;
+
+            const iconContainer = document.createElement('div');
+            iconContainer.className = 'icon-container';
+            iconContainer.style.background = bgColor;
+            iconContainer.style.color = 'white';
+
+            const icon = document.createElement('i');
+            icon.className = iconClass;
+            
+            const editIcon = document.createElement('div');
+            editIcon.className = 'edit-link-icon hidden';
+            editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
+            editIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal('edit', linkElement);
+            });
+            
+            iconContainer.appendChild(icon);
+            iconContainer.appendChild(editIcon);
+            linkElement.appendChild(iconContainer);
+            
+            return linkElement;
+        }
+
+        function openModal(mode, linkElement = null) {
+            currentEditingLink = linkElement;
+            if (mode === 'add') {
+                modalTitle.textContent = 'Tambah Tautan Baru';
+                linkForm.reset();
+                bgInput.value = '#333333';
+                deleteBtn.classList.add('hidden');
+            } else {
+                modalTitle.textContent = 'Edit Tautan';
+                urlInput.value = linkElement.href;
+                iconInput.value = linkElement.dataset.icon;
+                bgInput.value = linkElement.dataset.bg.startsWith('radial-gradient') ? '#000000' : linkElement.dataset.bg;
+                deleteBtn.classList.remove('hidden');
+            }
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            currentEditingLink = null;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const url = urlInput.value;
+            const icon = iconInput.value;
+            const bg = bgInput.value;
+
+            if (currentEditingLink) {
+                const newLink = createLinkElement(url, icon, bg);
+                currentEditingLink.replaceWith(newLink);
+                if (isEditMode) {
+                    newLink.querySelector('.edit-link-icon').classList.remove('hidden');
+                }
+            } else { 
+                const newLink = createLinkElement(url, icon, bg);
+                addLinkBtn.before(newLink);
+            }
+            closeModal();
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const toggleBtn = document.getElementById('toggle-edit-mode-btn');
+            const editBgBtn = document.getElementById('edit-bg-btn');
+            const editIcons = document.querySelectorAll('.edit-link-icon');
+
+            if (isEditMode) {
+                toggleBtn.classList.add('active-edit');
+                addLinkBtn.classList.remove('hidden');
+                editBgBtn.classList.remove('hidden');
+                editIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                toggleBtn.classList.remove('active-edit');
+                addLinkBtn.classList.add('hidden');
+                editBgBtn.classList.add('hidden');
+                editIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClock();
+            setInterval(updateClock, 1000 * 60);
+            fetchWeather();
+            // setRandomBackground();
+
+            document.querySelectorAll('#social-icons-container a').forEach(link => {
+                const editIcon = document.createElement('div');
+                editIcon.className = 'edit-link-icon hidden';
+                editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
+                editIcon.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openModal('edit', link);
+                });
+                link.querySelector('.icon-container').appendChild(editIcon);
+            });
+
+            document.getElementById('search-form').addEventListener('submit', handleSearch);
+            document.getElementById('toggle-edit-mode-btn').addEventListener('click', toggleEditMode);
+            document.getElementById('edit-bg-btn').addEventListener('click', setRandomBackground);
+
+            addLinkBtn.addEventListener('click', () => openModal('add'));
+            cancelBtn.addEventListener('click', closeModal);
+            linkForm.addEventListener('submit', handleFormSubmit);
+            deleteBtn.addEventListener('click', () => {
+                if (currentEditingLink && confirm('Apakah Anda yakin ingin menghapus tautan ini?')) {
+                    currentEditingLink.remove();
+                    closeModal();
+                }
+            });
+            // Sedikit modifikasi pada JS untuk modal
+            const initialModal = document.getElementById('link-modal');
+            initialModal.style.display = 'none'; 
+            initialModal.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

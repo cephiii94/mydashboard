@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily-Life Dashboard - Tuan Cecep</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1 id="greeting">Selamat pagi, Tuan Cecep!</h1>
+        <p id="current-time">11:21:55 AM, Rabu, 3 September 2025</p>
+    </header>
+
+    <main>
+        <section class="links-section">
+            <h2>Link Penting</h2>
+            <div class="links-container">
+                </div>
+            <button id="add-link-btn">Tambah Link</button>
+        </section>
+
+        <div id="add-link-form" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3>Tambah Link Baru</h3>
+                <input type="text" id="link-name" placeholder="Nama Link" required>
+                <input type="url" id="link-url" placeholder="URL Lengkap" required>
+                <button id="save-link-btn">Simpan</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

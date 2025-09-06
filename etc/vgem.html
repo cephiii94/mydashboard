@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Konfigurasi Tailwind CSS untuk mode gelap
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px; /* Slightly reduce base font size */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-gray-900 p-2 lg:p-4 transition-colors duration-300">
+    <div class="flex h-full max-h-[96vh] w-full max-w-[1600px] mx-auto bg-[#F6F7FB] dark:bg-gray-800 rounded-2xl">
+        <!-- Sidebar Navigation -->
+        <aside class="flex flex-col items-center justify-between bg-white dark:bg-gray-700 rounded-xl p-3 m-2 w-16">
+            <div class="flex flex-col items-center gap-3">
+                <!-- Logo -->
+                <div class="p-2 bg-blue-600 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                </div>
+                <!-- Navigation Icons -->
+                <nav class="flex flex-col items-center gap-2 mt-3">
+                    <a href="#" class="p-2 rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-800 dark:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-lg text-gray-500 hover:bg-blue-50 dark:text-gray-300 dark:hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-lg text-gray-500 hover:bg-blue-50 dark:text-gray-300 dark:hover:bg-gray-600">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-lg text-gray-500 hover:bg-blue-50 dark:text-gray-300 dark:hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    </a>
+                </nav>
+            </div>
+             <div class="flex flex-col items-center gap-2">
+                 <a href="#" class="p-2 rounded-lg text-gray-500 hover:bg-blue-50 dark:text-gray-300 dark:hover:bg-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                 </a>
+                 <img src="https://placehold.co/32x32/E2E8F0/475569?text=CH" alt="User Avatar" class="rounded-full mt-2">
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 overflow-y-auto">
+            <!-- Header -->
+            <header class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <div class="flex items-center gap-6">
+                    <nav class="flex items-center gap-5 text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        <a href="#" class="text-blue-600 dark:text-blue-400">Dashboard</a>
+                        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Workflows</a>
+                        <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400">Integrations</a>
+                    </nav>
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" placeholder="Search..." class="bg-white dark:bg-gray-700 dark:text-gray-200 rounded-lg py-1.5 pl-9 pr-3 w-48 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center bg-white dark:bg-gray-700 rounded-lg p-0.5">
+                        <button id="light-mode-btn" class="px-2 py-0.5 text-xs font-semibold rounded-md bg-blue-100 text-blue-700">Light</button>
+                        <button id="dark-mode-btn" class="px-2 py-0.5 text-xs font-semibold text-gray-600 dark:text-gray-300 rounded-md">Dark</button>
+                    </div>
+                    <button id="export-data-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-lg text-gray-700 font-semibold text-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Export
+                    </button>
+                    <button class="px-3 py-1.5 bg-blue-600 text-white rounded-lg font-semibold text-xs shadow-md hover:bg-blue-700">New Board</button>
+                </div>
+            </header>
+
+            <!-- Greeting -->
+            <section class="mb-4">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Hi, Cecep! 👋</h1>
+                <p class="text-lg text-gray-500 dark:text-gray-400">What are your plans for today?</p>
+            </section>
+            
+            <!-- Cards Section -->
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div class="bg-white/50 dark:bg-gray-700/50 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center p-4 hover:bg-white dark:hover:bg-gray-700 cursor-pointer transition">
+                    <div class="w-10 h-10 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600 dark:text-gray-300"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                    <img src="https://placehold.co/80x40/E0E7FF/3730A3?text=Icon" alt="Stay organized icon" class="mb-2 rounded-md">
+                    <h3 class="font-bold text-gray-800 dark:text-white text-base">Stay organized</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs">A clear structure for your notes</p>
+                </div>
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                    <img src="https://placehold.co/80x40/E0E7FF/3730A3?text=Icon" alt="Sync your notes icon" class="mb-2 rounded-md">
+                    <h3 class="font-bold text-gray-800 dark:text-white text-base">Sync your notes</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs">Ensure that notes are synced</p>
+                </div>
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                    <img src="https://placehold.co/80x40/E0E7FF/3730A3?text=Icon" alt="Collaborate and share icon" class="mb-2 rounded-md">
+                    <h3 class="font-bold text-gray-800 dark:text-white text-base">Collaborate & share</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs">Share notes with colleagues</p>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Left Column -->
+                <div class="lg:col-span-1 flex flex-col gap-4">
+                    <!-- Notifications -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-gray-800 dark:text-white">Notifications</h3>
+                            <button id="clear-notifications-btn" class="text-xs text-gray-500 dark:text-gray-400">Clear</button>
+                        </div>
+                        <div id="notifications-list" class="space-y-3">
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 dark:bg-gray-800 rounded-lg">
+                                <div class="w-8 h-8 bg-blue-200 dark:bg-blue-900 rounded-full flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 dark:text-blue-400"><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 21h8M12 16v5"></path><path d="M8 2v4h8V2z"></path><path d="M3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Upcoming event</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs">Meeting | 120 min</p>
+                                </div>
+                                <button class="text-gray-400 ml-auto">...</button>
+                            </div>
+                            <div class="flex items-start gap-3">
+                               <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center shrink-0">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-600 dark:text-yellow-400"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                               </div>
+                               <div>
+                                   <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Message</p>
+                                   <p class="text-gray-500 dark:text-gray-400 text-xs">From Rachel Lee</p>
+                               </div>
+                               <button class="text-gray-400 ml-auto">...</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Today Tasks -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-gray-800 dark:text-white">Today tasks</h3>
+                            <div class="flex items-center gap-2">
+                                <button class="text-gray-500 dark:text-gray-400 text-xs">Edit</button>
+                                <button class="text-gray-500 dark:text-gray-400 text-xs">Share</button>
+                            </div>
+                        </div>
+                        <div id="task-list" class="space-y-3">
+                            <!-- Task Item -->
+                            <div class="task-item flex items-center gap-3">
+                                <input type="checkbox" class="task-checkbox form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <div class="flex-1">
+                                    <p class="task-text font-semibold text-gray-700 dark:text-gray-200 text-sm">Conduct research</p>
+                                </div>
+                                <div class="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-1">
+                                    <div class="bg-blue-500 h-1 rounded-full" style="width: 90%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">90%</span>
+                            </div>
+                             <!-- Task Item -->
+                            <div class="task-item flex items-center gap-3">
+                                <input type="checkbox" class="task-checkbox form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <div class="flex-1">
+                                    <p class="task-text font-semibold text-gray-700 dark:text-gray-200 text-sm">Schedule a meeting</p>
+                                </div>
+                                <div class="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-1">
+                                    <div class="bg-yellow-500 h-1 rounded-full" style="width: 50%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="lg:col-span-2 flex flex-col gap-4">
+                    <!-- Assignments & Calendar Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                         <!-- Assignments -->
+                        <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-gray-800 dark:text-white">Assignments</h3>
+                                <button class="text-xs text-gray-500 dark:text-gray-400">Edit</button>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <div>
+                                        <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Motion design</p>
+                                    </div>
+                                    <span class="text-xs font-semibold bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md">High</span>
+                                </div>
+                                <div class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <div>
+                                        <p class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Packaging</p>
+                                    </div>
+                                     <img src="https://placehold.co/20x20/E2E8F0/475569?text=RL" alt="Rachel Lee" class="rounded-full">
+                                </div>
+                            </div>
+                            <button class="mt-2 w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-600 text-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 dark:text-gray-400"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                 New assignment
+                            </button>
+                        </div>
+                        <!-- Calendar -->
+                        <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 id="calendar-month-year" class="font-bold text-gray-800 dark:text-white text-base"></h3>
+                                <div class="flex gap-1.5">
+                                    <button id="prev-month-btn" class="p-1 rounded-md bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-300">&lt;</button>
+                                    <button id="next-month-btn" class="p-1 rounded-md bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-300">&gt;</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-7 text-center text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                            </div>
+                            <div id="calendar-days" class="grid grid-cols-7 text-center text-xs font-semibold text-gray-700 dark:text-gray-200">
+                                <!-- Calendar days will be generated by JS -->
+                            </div>
+                            <div class="mt-2 space-y-1.5">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-1 h-8 bg-red-400 rounded-full"></div>
+                                    <div>
+                                        <p class="font-semibold text-xs dark:text-gray-200">Team meeting</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">10:00 - 10:30</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Bottom card -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800 dark:text-white">Board meeting</h3>
+                            <button class="text-xs text-gray-500 dark:text-gray-400">Edit</button>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <p class="font-semibold text-gray-700 dark:text-gray-200 text-sm">Meeting with John Smith</p>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 bg-gray-100 dark:bg-gray-600 rounded-lg font-semibold text-xs text-gray-700 dark:text-gray-200">Reschedule</button>
+                                <button class="px-3 py-1.5 bg-blue-600 text-white rounded-lg font-semibold text-xs shadow-md hover:bg-blue-700">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Dark/Light Mode Toggle ---
+            const lightModeBtn = document.getElementById('light-mode-btn');
+            const darkModeBtn = document.getElementById('dark-mode-btn');
+            const htmlElement = document.documentElement;
+
+            lightModeBtn.addEventListener('click', () => {
+                htmlElement.classList.remove('dark');
+                lightModeBtn.classList.add('bg-blue-100', 'text-blue-700');
+                darkModeBtn.classList.remove('bg-gray-600', 'text-white');
+            });
+
+            darkModeBtn.addEventListener('click', () => {
+                htmlElement.classList.add('dark');
+                darkModeBtn.classList.add('bg-gray-600', 'text-white');
+                lightModeBtn.classList.remove('bg-blue-100', 'text-blue-700');
+            });
+
+            // --- Clear Notifications ---
+            const clearNotificationsBtn = document.getElementById('clear-notifications-btn');
+            const notificationsList = document.getElementById('notifications-list');
+
+            clearNotificationsBtn.addEventListener('click', () => {
+                notificationsList.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No new notifications.</p>';
+            });
+
+            // --- Task Checkbox Functionality ---
+            const taskList = document.getElementById('task-list');
+            taskList.addEventListener('change', (event) => {
+                if (event.target.classList.contains('task-checkbox')) {
+                    const taskText = event.target.closest('.task-item').querySelector('.task-text');
+                    taskText.classList.toggle('line-through', event.target.checked);
+                }
+            });
+            
+            // --- Button Click Feedback ---
+            const exportBtn = document.getElementById('export-data-btn');
+            if(exportBtn) {
+                exportBtn.addEventListener('click', () => {
+                    // Using a custom modal/toast in the future would be better than alert
+                    console.log('Export data button clicked.');
+                });
+            }
+
+            // --- Calendar Functionality ---
+            const monthYearElement = document.getElementById('calendar-month-year');
+            const daysElement = document.getElementById('calendar-days');
+            const prevMonthBtn = document.getElementById('prev-month-btn');
+            const nextMonthBtn = document.getElementById('next-month-btn');
+
+            let currentDate = new Date(2025, 4, 1); // Starting with May 2025
+
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                monthYearElement.textContent = `${monthNames[month]} ${year}`;
+
+                // Sunday is 0, Monday is 1, etc.
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                daysElement.innerHTML = '';
+
+                // Add empty placeholders
+                for (let i = 0; i < firstDayOfMonth; i++) {
+                    daysElement.innerHTML += '<span></span>';
+                }
+                
+                // Add the days
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let dayClass = "py-1 px-1.5";
+                    // Highlight day 18
+                    if (year === 2025 && month === 4 && i === 18) {
+                        dayClass += " text-white bg-blue-600 rounded-full w-6 h-6 mx-auto flex items-center justify-center";
+                    }
+                    daysElement.innerHTML += `<span class="${dayClass}">${i}</span>`;
+                }
+            }
+
+            prevMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            // Initial render
+            renderCalendar();
+        });
+    </script>
+</body>
+</html>
+

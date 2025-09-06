@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda Pribadi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s;
+        }
+        .icon-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative; /* Diperlukan untuk posisi ikon edit */
+        }
+        .icon-container:hover {
+            transform: scale(1.1);
+        }
+        .youtube { background-color: #FF0000; color: white; }
+        .facebook { background-color: #1877F2; color: white; }
+        .instagram { 
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            color: white;
+        }
+        .add { background-color: #E0E0E0; color: #333; }
+        .hidden {
+            display: none;
+        }
+        .active-edit {
+            background: rgba(40, 90, 235, 0.4);
+            border-color: rgba(40, 90, 235, 0.8);
+        }
+        /* Ikon edit kecil untuk setiap link */
+        .edit-link-icon {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #285aeb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .edit-link-icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body class="bg-cover bg-center bg-no-repeat text-white h-screen overflow-hidden" style="background-image: url('img/background/futuristic-moon-background.jpg');">
+
+    <div class="relative flex flex-col h-full p-6 sm:p-8">
+        <div id="edit-bg-btn" class="hidden absolute top-8 right-8 glassmorphism rounded-lg px-4 py-2 cursor-pointer hover:bg-white/20 z-10">
+            <i class="fa fa-image mr-2"></i> Ganti Latar
+        </div>
+
+        <header class="flex justify-between items-start w-full">
+            <nav class="glassmorphism rounded-xl px-6 py-3">
+                <ul class="flex space-x-6 text-lg">
+                    <li><a href="#" class="font-bold hover:underline">Beranda</a></li>
+                    <li><a href="#" class="hover:underline">Bookmark</a></li>
+                    <li><a href="#" class="hover:underline">Tugas</a></li>
+                    <li><a href="#" class="hover:underline">Diskusi</a></li>
+                </ul>
+            </nav>
+            <div id="clock-container" class="glassmorphism rounded-xl px-6 py-3 text-right">
+                <div id="clock" class="text-5xl font-bold">00:00</div>
+                <div id="location-weather" class="text-sm">lokasi, cuaca</div>
+            </div>
+        </header>
+
+        <main class="flex-grow flex items-center justify-center w-full">
+            <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-1 flex items-center justify-start">
+                    <div class="glassmorphism rounded-xl p-6 w-full max-w-xs">
+                        <h2 class="text-xl font-bold mb-3 border-b border-gray-400 pb-2">Motivasi</h2>
+                        <p class="text-sm leading-relaxed">
+                            Manfaatkan setiap hari sebagai kesempatan baru untuk berkembang, karena kegagalan hanyalah bagian dari proses dan kesuksesan adalah hasil dari usaha serta ketekunan yang konsisten.
+                        </p>
+                    </div>
+                </div>
+                <div class="md:col-span-1 flex flex-col items-center justify-center space-y-6">
+                    <div class="glassmorphism rounded-xl p-4 text-center">
+                        <h1 class="text-xl">Hallo, Tuan Cecep!</h1>
+                        <p class="text-md">Aktivitas apa yang akan kita lakukan hari ini?</p>
+                    </div>
+                    <form id="search-form" class="w-full max-w-lg">
+                        <div class="relative">
+                            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="search-input" placeholder="Telusuri Google atau ketik URL" class="w-full bg-white/90 text-gray-800 rounded-full py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                    </form>
+                </div>
+                <div class="md:col-span-1 flex items-center justify-end">
+                    <div class="glassmorphism rounded-xl p-6 w-full max-w-xs">
+                         <div class="flex justify-between items-center mb-3 border-b border-gray-400 pb-2">
+                            <h2 class="text-xl font-bold">TodoList Daily!</h2>
+                            <button class="hover:text-gray-300"><i class="fa fa-pencil"></i></button>
+                        </div>
+                        <ul id="todo-list" class="space-y-3">
+                             <li class="flex items-center justify-between"><label for="task1">Report</label><input type="checkbox" id="task1" class="form-checkbox h-5 w-5 bg-transparent border-white text-blue-500 rounded focus:ring-0"></li>
+                             <li class="flex items-center justify-between"><label for="task2">Stock Opname</label><input type="checkbox" id="task2" class="form-checkbox h-5 w-5 bg-transparent border-white text-blue-500 rounded focus:ring-0"></li>
+                             <li class="flex items-center justify-between"><label for="task3">Absensi</label><input type="checkbox" id="task3" class="form-checkbox h-5 w-5 bg-transparent border-white text-blue-500 rounded focus:ring-0"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="flex justify-between items-center w-full">
+             <div class="flex-grow flex justify-center">
+                <div id="social-icons-container" class="glassmorphism rounded-full px-6 py-2 flex items-center">
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-youtube" data-bg="#FF0000">
+                        <div class="icon-container youtube"><i class="fab fa-youtube"></i></div>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-facebook-f" data-bg="#1877F2">
+                        <div class="icon-container facebook"><i class="fab fa-facebook-f"></i></div>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" data-icon="fab fa-instagram" data-bg="radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)">
+                        <div class="icon-container instagram"><i class="fab fa-instagram"></i></div>
+                    </a>
+                    <div id="add-link-btn" class="icon-container add hidden"><i class="fa fa-plus"></i></div>
+                </div>
+             </div>
+             <div class="flex items-center space-x-4">
+                <div id="toggle-edit-mode-btn" class="glassmorphism rounded-full p-3 h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-white/20">
+                    <i class="fa fa-pencil text-2xl"></i>
+                </div>
+                <div class="glassmorphism rounded-full p-3 h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-white/20">
+                    <i class="fa fa-cog text-2xl"></i>
+                </div>
+             </div>
+        </footer>
+    </div>
+
+    <div id="link-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-gray-800/80 backdrop-blur-md rounded-xl p-8 w-full max-w-md text-white shadow-lg">
+            <h2 id="modal-title" class="text-2xl font-bold mb-6">Tambah Tautan Baru</h2>
+            <form id="link-form">
+                <div class="mb-4">
+                    <label for="link-url" class="block mb-2 text-sm font-medium">URL</label>
+                    <input type="text" id="link-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="https://contoh.com" required>
+                </div>
+                <div class="mb-4">
+                    <label for="link-icon" class="block mb-2 text-sm font-medium">Kelas Ikon (Font Awesome)</label>
+                    <input type="text" id="link-icon" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="fab fa-twitter" required>
+                </div>
+                <div class="mb-6">
+                    <label for="link-bg" class="block mb-2 text-sm font-medium">Warna Latar</label>
+                    <input type="color" id="link-bg" class="w-full h-10 p-1 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer" value="#333333">
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <button type="button" id="delete-link-btn" class="hidden bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                            <i class="fa fa-trash mr-2"></i>Hapus
+                        </button>
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Batal</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        let isEditMode = false;
+        let currentEditingLink = null; // Menyimpan link yang sedang diedit
+
+        const modal = document.getElementById('link-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const linkForm = document.getElementById('link-form');
+        const urlInput = document.getElementById('link-url');
+        const iconInput = document.getElementById('link-icon');
+        const bgInput = document.getElementById('link-bg');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const deleteBtn = document.getElementById('delete-link-btn');
+        const addLinkBtn = document.getElementById('add-link-btn');
+
+        // Fungsi dasar
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+
+        function fetchWeather() {
+            document.getElementById('location-weather').textContent = 'Bandung, Cerah';
+        }
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                const url = normalizeUrl(query, true); // Cek jika itu URL
+                window.open(url, '_blank');
+                document.getElementById('search-input').value = '';
+            }
+        }
+
+        async function setRandomBackground() {
+            try {
+                const response = await fetch('https://source.unsplash.com/1920x1080/?city,architecture,nature,landscape');
+                if (response.url) {
+                    document.body.style.backgroundImage = `url('${response.url}')`;
+                }
+            } catch (error) {
+                console.error("Gagal memuat latar belakang:", error);
+            }
+        }
+        
+        // --- FUNGSI BARU ---
+
+        function normalizeUrl(url, isSearch = false) {
+            if (/^https?:\/\//.test(url)) {
+                return url;
+            }
+            if (!isSearch && /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(url)) {
+                return `https://${url}`;
+            }
+            if (isSearch && /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(url)) {
+                 return `https://${url}`;
+            }
+            return isSearch ? `https://www.google.com/search?q=${encodeURIComponent(url)}` : `https://${url}`;
+        }
+
+
+        function createLinkElement(url, iconClass, bgColor) {
+            const linkElement = document.createElement('a');
+            linkElement.href = normalizeUrl(url);
+            linkElement.target = '_blank';
+            linkElement.rel = 'noopener noreferrer';
+            linkElement.dataset.icon = iconClass;
+            linkElement.dataset.bg = bgColor;
+
+            const iconContainer = document.createElement('div');
+            iconContainer.className = 'icon-container';
+            iconContainer.style.background = bgColor;
+            iconContainer.style.color = 'white';
+
+            const icon = document.createElement('i');
+            icon.className = iconClass;
+            
+            // Tambahkan ikon edit pensil
+            const editIcon = document.createElement('div');
+            editIcon.className = 'edit-link-icon hidden';
+            editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
+            editIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal('edit', linkElement);
+            });
+            
+            iconContainer.appendChild(icon);
+            iconContainer.appendChild(editIcon); // Tambahkan ke container
+            linkElement.appendChild(iconContainer);
+            
+            return linkElement;
+        }
+
+        function openModal(mode, linkElement = null) {
+            currentEditingLink = linkElement;
+            if (mode === 'add') {
+                modalTitle.textContent = 'Tambah Tautan Baru';
+                linkForm.reset();
+                bgInput.value = '#333333';
+                deleteBtn.classList.add('hidden');
+            } else {
+                modalTitle.textContent = 'Edit Tautan';
+                urlInput.value = linkElement.href;
+                iconInput.value = linkElement.dataset.icon;
+                bgInput.value = linkElement.dataset.bg.startsWith('radial-gradient') ? '#000000' : linkElement.dataset.bg;
+                deleteBtn.classList.remove('hidden');
+            }
+            modal.classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            modal.classList.add('hidden');
+            currentEditingLink = null;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const url = urlInput.value;
+            const icon = iconInput.value;
+            const bg = bgInput.value;
+
+            if (currentEditingLink) { // Mode Edit
+                const newLink = createLinkElement(url, icon, bg);
+                currentEditingLink.replaceWith(newLink);
+                if (isEditMode) {
+                    newLink.querySelector('.edit-link-icon').classList.remove('hidden');
+                }
+            } else { // Mode Tambah
+                const newLink = createLinkElement(url, icon, bg);
+                addLinkBtn.before(newLink);
+            }
+            closeModal();
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const toggleBtn = document.getElementById('toggle-edit-mode-btn');
+            const editBgBtn = document.getElementById('edit-bg-btn');
+            const editIcons = document.querySelectorAll('.edit-link-icon');
+
+            if (isEditMode) {
+                toggleBtn.classList.add('active-edit');
+                addLinkBtn.classList.remove('hidden');
+                editBgBtn.classList.remove('hidden');
+                editIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                toggleBtn.classList.remove('active-edit');
+                addLinkBtn.classList.add('hidden');
+                editBgBtn.classList.add('hidden');
+                editIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+        
+        // Inisialisasi dan Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClock();
+            setInterval(updateClock, 1000 * 60);
+            fetchWeather();
+            // setRandomBackground(); // Matikan agar tidak ganti-ganti saat development
+
+            // Buat ikon edit untuk link yang sudah ada
+            document.querySelectorAll('#social-icons-container a').forEach(link => {
+                const editIcon = document.createElement('div');
+                editIcon.className = 'edit-link-icon hidden';
+                editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
+                editIcon.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openModal('edit', link);
+                });
+                link.querySelector('.icon-container').appendChild(editIcon);
+            });
+
+            document.getElementById('search-form').addEventListener('submit', handleSearch);
+            document.getElementById('toggle-edit-mode-btn').addEventListener('click', toggleEditMode);
+            document.getElementById('edit-bg-btn').addEventListener('click', setRandomBackground);
+
+            // Event listeners untuk modal
+            addLinkBtn.addEventListener('click', () => openModal('add'));
+            cancelBtn.addEventListener('click', closeModal);
+            linkForm.addEventListener('submit', handleFormSubmit);
+            deleteBtn.addEventListener('click', () => {
+                if (currentEditingLink && confirm('Apakah Anda yakin ingin menghapus tautan ini?')) {
+                    currentEditingLink.remove();
+                    closeModal();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
