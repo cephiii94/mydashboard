@@ -54,6 +54,7 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; border: 2px solid white; cursor: pointer;
             transition: transform 0.2s;
+            pointer-events: none; /* Mencegah ikon ini menangkap event klik */
         }
         .edit-link-icon:hover { transform: scale(1.2); }
         .page-container { position: relative; display: flex; flex-direction: column; height: 100%; padding: 2rem; }
@@ -120,6 +121,62 @@
         .settings-section h3 { font-size: 1.125rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--glassmorphism-border); padding-bottom: 0.5rem; }
         .settings-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         #user-id-display { font-size: 0.75rem; color: #9CA3AF; word-break: break-all; }
+        
+        /* Custom Alert/Confirm Modal */
+        #custom-alert-modal .modal-content { max-width: 24rem; text-align: center; }
+        #custom-alert-text { margin-bottom: 1.5rem; }
+        #custom-alert-modal .modal-footer { justify-content: center; }
+
+        /* Background Gallery Styles */
+        #background-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 0.5rem;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 0.5rem;
+        }
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+            aspect-ratio: 16 / 9;
+        }
+        .gallery-item.active {
+            border-color: var(--soft-blue);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-item .gallery-delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(220, 38, 38, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            line-height: 24px;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 2;
+        }
+        .gallery-item:hover .gallery-delete-btn {
+            opacity: 1;
+        }
 
         .btn { font-weight: 700; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.2s; border: none; cursor: pointer; }
         .btn-danger { background-color: #DC2626; color: white; } .btn-danger:hover { background-color: #B91C1C; }
@@ -140,6 +197,9 @@
             <input type="file" id="bg-file-input" accept="image/*">
             <div id="edit-bg-online-btn" class="edit-bg-btn glassmorphism">
                 <i class="fa fa-image"></i> Online
+            </div>
+            <div id="open-gallery-btn" class="edit-bg-btn glassmorphism">
+                <i class="fa fa-images"></i> Galeri
             </div>
             <div id="edit-bg-default-btn" class="edit-bg-btn glassmorphism">
                 <i class="fa fa-undo"></i> Default
@@ -173,7 +233,7 @@
                 </div>
                 <div class="grid-item justify-center grid-item-center-col">
                     <div class="welcome-card glassmorphism">
-                        <h1>Hallo, Tuan Cecep!</h1>
+                        <h1>Hallo, Tuan Cecep Hardiansyah!</h1>
                         <p>Aktivitas apa yang akan kita lakukan hari ini?</p>
                     </div>
                     <form id="search-form">
@@ -190,7 +250,7 @@
                             <button style="background: none; border: none; color: white; cursor: pointer;"><i class="fa fa-pencil"></i></button>
                         </div>
                         <ul id="todo-list">
-                             <li><label for="task1">Report</label><input type="checkbox" id="task1" class="form-checkbox"></li>
+                             <li><label for="task1">Waktu bermain bersama Vanno & Varren</label><input type="checkbox" id="task1" class="form-checkbox"></li>
                              <li><label for="task2">Stock Opname</label><input type="checkbox" id="task2" class="form-checkbox"></li>
                              <li><label for="task3">Absensi</label><input type="checkbox" id="task3" class="form-checkbox"></li>
                         </ul>
@@ -202,16 +262,7 @@
         <footer class="footer">
              <div class="footer-center">
                 <div id="social-icons-container" class="glassmorphism">
-                    <!-- Tautan ini adalah templat untuk pengguna baru -->
-                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" data-key="youtube">
-                        <div class="icon-container" style="background-color: #FF0000;"><i class="fab fa-youtube"></i></div>
-                    </a>
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" data-key="facebook">
-                        <div class="icon-container" style="background-color: #1877F2;"><i class="fab fa-facebook-f"></i></div>
-                    </a>
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" data-key="instagram">
-                        <div class="icon-container" style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);"><i class="fab fa-instagram"></i></div>
-                    </a>
+                    <!-- Links will be loaded here from Firestore -->
                     <div id="add-link-btn" class="icon-container add hidden"><i class="fa fa-plus"></i></div>
                 </div>
              </div>
@@ -226,7 +277,7 @@
         </footer>
     </div>
 
-    <!-- Modal untuk Edit/Tambah Tautan -->
+    <!-- Modal for Edit/Add Link -->
     <div id="link-modal" class="modal">
         <div class="modal-content">
             <h2 id="modal-title">Tambah Tautan Baru</h2>
@@ -259,7 +310,7 @@
         </div>
     </div>
 
-    <!-- Modal untuk Pengaturan -->
+    <!-- Modal for Settings -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <h2>Pengaturan</h2>
@@ -286,26 +337,56 @@
             </div>
         </div>
     </div>
+
+    <!-- Custom Alert/Confirm Modal -->
+    <div id="custom-alert-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="custom-alert-title">Konfirmasi</h2>
+            <p id="custom-alert-text">Apakah Anda yakin?</p>
+            <div class="modal-footer">
+                <div id="custom-alert-buttons" class="modal-buttons">
+                    <button id="custom-alert-cancel" class="btn btn-secondary">Batal</button>
+                    <button id="custom-alert-confirm" class="btn btn-danger">Yakin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Background Gallery -->
+    <div id="background-modal" class="modal">
+        <div class="modal-content" style="max-width: 48rem;">
+            <h2>Galeri Latar Belakang</h2>
+            <div id="background-gallery-grid">
+                <!-- Thumbnails will be injected here by JavaScript -->
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                 <button id="close-gallery-btn" class="btn btn-primary">Tutup</button>
+            </div>
+        </div>
+    </div>
     
     <script type="module">
-        // --- KONFIGURASI ---
+        // --- CONFIGURATION ---
         const firebaseConfig = {
-            apiKey: "AIzaSyBFHxMx8Y6VGESTdvU9DhASdgY2VHSOMzk",
-            authDomain: "meedashboard.firebaseapp.com",
-            projectId: "meedashboard",
-            storageBucket: "meedashboard.firebasestorage.app",
-            messagingSenderId: "593936105949",
-            appId: "1:593936105949:web:5d35bfdfdd0e849efdf634",
-            measurementId: "G-DT2QMNVQ4N"
+            apiKey: "AIzaSyD5dhh4a3835uJGxxvKL27KcTAtu0f7bT4",
+            authDomain: "all-auth-1509.firebaseapp.com",
+            projectId: "all-auth-1509",
+            storageBucket: "all-auth-1509.firebasestorage.app",
+            messagingSenderId: "23681152443",
+            appId: "1:23681152443:web:8f86c9b89e14c90692809e",
+            measurementId: "G-D3Y0WHY83V"
         };
-        const DEFAULT_BACKGROUND_URL = 'img/background/futuristic-moon-background.jpg';
+        // NOTE: Path 'img/background/...' is for local use. 
+        // For online demo, we use a placeholder URL.
+        const DEFAULT_BACKGROUND_URL = 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop';
 
-        // Import fungsi-fungsi Firebase
+
+        // --- Firebase Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDoc, writeBatch, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDoc, writeBatch, getDocs, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Inisialisasi Firebase
+        // --- Firebase Initialization ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -321,7 +402,7 @@
         const socialIconsContainer = document.getElementById('social-icons-container');
         const editModeIcon = document.getElementById('edit-mode-icon');
         
-        // --- Otentikasi & Inisialisasi Aplikasi ---
+        // --- Authentication & App Initialization ---
         onAuthStateChanged(auth, user => {
             if (user) {
                 userId = user.uid;
@@ -332,13 +413,13 @@
                 });
             } else {
                 signInAnonymously(auth).catch(error => {
-                    console.error("Gagal login anonim:", error);
-                    loader.textContent = "Gagal terhubung ke server.";
+                    console.error("Anonymous sign-in failed:", error);
+                    showCustomAlert("Gagal terhubung ke server.", "Error");
                 });
             }
         });
         
-        // --- Inisialisasi Data Pengguna Baru ---
+        // --- Initialize New User Data ---
         async function initializeAppData() {
             if (!userId) return;
             const settingsRef = doc(db, 'users', userId, 'settings', 'config');
@@ -346,46 +427,63 @@
 
             if (!settingsSnap.exists() || !settingsSnap.data().isInitialized) {
                 const batch = writeBatch(db);
-                const defaultLinks = socialIconsContainer.querySelectorAll('a[data-key]');
+                // Default links for new users
+                const defaultLinks = [
+                    { key: 'youtube', url: 'https://youtube.com', icon: 'fab fa-youtube', bgColor: '#FF0000' },
+                    { key: 'facebook', url: 'https://facebook.com', icon: 'fab fa-facebook-f', bgColor: '#1877F2' },
+                    { key: 'instagram', url: 'https://instagram.com', icon: 'fab fa-instagram', bgColor: 'radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)' }
+                ];
+
                 defaultLinks.forEach(link => {
-                    const key = link.dataset.key;
-                    if (key) {
-                        const newLinkRef = doc(db, 'users', userId, 'links', key);
-                        batch.set(newLinkRef, {
-                            url: link.href,
-                            icon: link.querySelector('i').className,
-                            bgColor: link.querySelector('.icon-container').style.background || getComputedStyle(link.querySelector('.icon-container')).background
-                        });
-                    }
+                    const newLinkRef = doc(db, 'users', userId, 'links', link.key);
+                    batch.set(newLinkRef, { url: link.url, icon: link.icon, bgColor: link.bgColor });
                 });
+                
                 batch.set(settingsRef, { isInitialized: true });
                 await batch.commit();
-                console.log("Tautan default telah disimpan untuk pengguna baru.");
             }
         }
 
-        // --- Fungsi Latar Belakang (Menggunakan Local Storage) ---
-        function loadBackgroundFromLocal() {
-            const backgroundData = localStorage.getItem('dashboardBackground');
-            if (backgroundData) {
-                document.body.style.backgroundImage = `url('${backgroundData}')`;
+        // --- Background Functions (Using Local Storage) ---
+        function getStoredBackgrounds() {
+            return JSON.parse(localStorage.getItem('dashboardBackgrounds')) || [];
+        }
+
+        function getCurrentBackground() {
+            return localStorage.getItem('currentDashboardBackground') || DEFAULT_BACKGROUND_URL;
+        }
+
+        function loadBackground() {
+            document.body.style.backgroundImage = `url('${getCurrentBackground()}')`;
+        }
+
+        function applyBackground(url) {
+            document.body.style.backgroundImage = `url('${url}')`;
+            localStorage.setItem('currentDashboardBackground', url);
+            const galleryModal = document.getElementById('background-modal');
+            if (galleryModal.style.display === 'flex') {
+                updateGalleryActiveState();
             }
         }
 
-        function saveBackgroundToLocal(data) {
+        function saveUploadedBackground(data) {
             try {
-                localStorage.setItem('dashboardBackground', data);
-                document.body.style.backgroundImage = `url('${data}')`;
+                const backgrounds = getStoredBackgrounds();
+                if (!backgrounds.includes(data)) {
+                    backgrounds.push(data);
+                    localStorage.setItem('dashboardBackgrounds', JSON.stringify(backgrounds));
+                }
+                applyBackground(data);
             } catch (error) {
-                alert("Gagal menyimpan gambar. Mungkin penyimpanan browser penuh.");
+                showCustomAlert("Gagal menyimpan gambar. Mungkin penyimpanan browser penuh.", "Error");
             }
         }
-        
+                
         function handleLocalUpload(file) {
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (event) => saveBackgroundToLocal(event.target.result);
-            reader.onerror = (error) => alert("Gagal membaca file gambar.");
+            reader.onload = (event) => saveUploadedBackground(event.target.result);
+            reader.onerror = (error) => showCustomAlert("Gagal membaca file gambar.", "Error");
             reader.readAsDataURL(file);
         }
 
@@ -393,21 +491,74 @@
             loader.style.display = 'flex';
             loader.textContent = 'Mencari gambar online...';
             try {
-                const response = await fetch('https://source.unsplash.com/1920x1080/?nature,landscape,galaxy,space');
-                if (response.url) saveBackgroundToLocal(response.url);
+                const response = await fetch('https://source.unsplash.com/1920x1080/?nature,landscape,galaxy,space,abstract');
+                if (response.url) {
+                    applyBackground(response.url); // Does not save to gallery
+                }
             } catch (error) {
-                alert("Gagal mengambil gambar online.");
+                showCustomAlert("Gagal mengambil gambar online.", "Error");
             } finally {
                 loader.style.display = 'none';
             }
         }
 
         function restoreDefaultBackground() {
-            localStorage.removeItem('dashboardBackground');
-            document.body.style.backgroundImage = `url('${DEFAULT_BACKGROUND_URL}')`;
+            applyBackground(DEFAULT_BACKGROUND_URL);
         }
 
-        // --- Fungsi-fungsi untuk Tautan (CRUD ke Firestore) ---
+        function deleteBackgroundImage(urlToDelete) {
+            let backgrounds = getStoredBackgrounds();
+            backgrounds = backgrounds.filter(url => url !== urlToDelete);
+            localStorage.setItem('dashboardBackgrounds', JSON.stringify(backgrounds));
+            if (getCurrentBackground() === urlToDelete) {
+                restoreDefaultBackground();
+            }
+            openBackgroundGallery(); // Refresh gallery view
+        }
+
+        function openBackgroundGallery() {
+            const grid = document.getElementById('background-gallery-grid');
+            grid.innerHTML = '';
+            const allBackgrounds = [DEFAULT_BACKGROUND_URL, ...getStoredBackgrounds()];
+            const currentBg = getCurrentBackground();
+            allBackgrounds.forEach(url => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                if (url === currentBg) {
+                    item.classList.add('active');
+                }
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Background Thumbnail';
+                item.appendChild(img);
+                item.addEventListener('click', () => applyBackground(url));
+                if (url !== DEFAULT_BACKGROUND_URL) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'gallery-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteBackgroundImage(url);
+                    };
+                    item.appendChild(deleteBtn);
+                }
+                grid.appendChild(item);
+            });
+            document.getElementById('background-modal').style.display = 'flex';
+        }
+
+        function updateGalleryActiveState() {
+            const currentBg = getCurrentBackground();
+            document.querySelectorAll('#background-gallery-grid .gallery-item').forEach(item => {
+                const img = item.querySelector('img');
+                if (img) {
+                    item.classList.toggle('active', img.src === currentBg);
+                }
+            });
+        }
+
+
+        // --- Link Functions (CRUD to Firestore) ---
         function loadLinks() {
             if (!userId) return;
             const linksCollection = collection(db, 'users', userId, 'links');
@@ -419,7 +570,7 @@
                 });
             });
         }
-
+        
         function createLinkElement(id, data) {
             const linkElement = document.createElement('a');
             linkElement.href = normalizeUrl(data.url);
@@ -429,45 +580,44 @@
             linkElement.dataset.url = data.url;
             linkElement.dataset.icon = data.icon;
             linkElement.dataset.bg = data.bgColor;
-
             const iconContainer = document.createElement('div');
             iconContainer.className = 'icon-container';
             iconContainer.style.background = data.bgColor;
-
             const icon = document.createElement('i');
             icon.className = data.icon;
-            
             const editIcon = document.createElement('div');
             editIcon.className = 'edit-link-icon';
             editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
             editIcon.classList.toggle('hidden', !isEditMode);
-            editIcon.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                openModal('edit', linkElement);
-            });
-            
             iconContainer.appendChild(icon);
             iconContainer.appendChild(editIcon);
             linkElement.appendChild(iconContainer);
+            linkElement.addEventListener('click', (e) => {
+                if (isEditMode) {
+                    e.preventDefault();
+                    openModal('edit', linkElement);
+                }
+            });
             return linkElement;
         }
 
-        // --- Fungsi Modal ---
+        // --- Modal Functions ---
         function openModal(type, linkElement = null) {
-            if (type === 'link') {
+            if (type === 'link' || type === 'edit') {
                 linkForm.reset();
                 const linkIdInput = document.getElementById('link-id');
                 const deleteBtn = document.getElementById('delete-link-btn');
                 
-                if (linkElement) { // Mode Edit
+                if (linkElement) { // Edit Mode
                     document.getElementById('modal-title').textContent = 'Edit Tautan';
                     linkIdInput.value = linkElement.dataset.id;
                     document.getElementById('link-url').value = linkElement.dataset.url;
                     document.getElementById('link-icon').value = linkElement.dataset.icon;
-                    document.getElementById('link-bg').value = linkElement.dataset.bg.startsWith('radial-gradient') ? '#000000' : linkElement.dataset.bg;
+                    const bgColor = linkElement.dataset.bg;
+                    document.getElementById('link-bg').value = bgColor.includes('gradient') ? '#000000' : bgColor;
+                    
                     deleteBtn.classList.remove('hidden');
-                } else { // Mode Tambah
+                } else { // Add Mode
                     document.getElementById('modal-title').textContent = 'Tambah Tautan Baru';
                     linkIdInput.value = '';
                     deleteBtn.classList.add('hidden');
@@ -499,19 +649,20 @@
                 else await addDoc(collectionRef, linkData);
                 closeModal('link');
             } catch (error) {
-                alert("Gagal menyimpan data ke server.");
+                showCustomAlert("Gagal menyimpan data ke server.", "Error");
             }
         }
 
         async function deleteLink() {
             const linkId = document.getElementById('link-id').value;
             if (!userId || !linkId) return;
-            if (confirm('Apakah Anda yakin ingin menghapus tautan ini?')) {
+            const confirmed = await showCustomConfirm('Apakah Anda yakin ingin menghapus tautan ini?');
+            if (confirmed) {
                 try {
                     await deleteDoc(doc(db, 'users', userId, 'links', linkId));
                     closeModal('link');
                 } catch (error) {
-                    alert("Gagal menghapus tautan.");
+                    showCustomAlert("Gagal menghapus tautan.", "Error");
                 }
             }
         }
@@ -526,7 +677,9 @@
         }
         
         async function resetLinksToDefault() {
-            if (!userId || !confirm('Ini akan menghapus semua tautan Anda dan mengembalikannya ke awal. Lanjutkan?')) return;
+            if (!userId) return;
+            const confirmed = await showCustomConfirm('Ini akan menghapus semua tautan Anda dan mengembalikannya ke awal. Lanjutkan?');
+            if (!confirmed) return;
             loader.style.display = 'flex';
             loader.textContent = 'Mereset tautan...';
             try {
@@ -535,19 +688,53 @@
                 const batch = writeBatch(db);
                 querySnapshot.forEach(doc => batch.delete(doc.ref));
                 await batch.commit();
-
-                // Hapus tanda inisialisasi agar link default dibuat ulang saat refresh
                 const settingsRef = doc(db, 'users', userId, 'settings', 'config');
                 await deleteDoc(settingsRef);
-
-                alert('Tautan berhasil direset. Halaman akan dimuat ulang.');
-                window.location.reload();
+                showCustomAlert('Tautan berhasil direset. Halaman akan dimuat ulang.', 'Sukses', () => {
+                    window.location.reload();
+                });
             } catch (error) {
-                console.error("Gagal mereset tautan:", error);
-                alert("Gagal mereset tautan.");
+                console.error("Failed to reset links:", error);
+                showCustomAlert("Gagal mereset tautan.", "Error");
             } finally {
                 loader.style.display = 'none';
             }
+        }
+        
+        // --- Custom Alert/Confirm Functions ---
+        function showCustomAlert(message, title = "Info", callback = null) {
+            const modal = document.getElementById('custom-alert-modal');
+            document.getElementById('custom-alert-title').textContent = title;
+            document.getElementById('custom-alert-text').textContent = message;
+            const buttonContainer = document.getElementById('custom-alert-buttons');
+            buttonContainer.innerHTML = `<button id="custom-alert-ok" class="btn btn-primary">OK</button>`;
+            modal.style.display = 'flex';
+            document.getElementById('custom-alert-ok').onclick = () => {
+                modal.style.display = 'none';
+                if (callback) callback();
+            };
+        }
+
+        function showCustomConfirm(message, title = "Konfirmasi") {
+            return new Promise(resolve => {
+                const modal = document.getElementById('custom-alert-modal');
+                document.getElementById('custom-alert-title').textContent = title;
+                document.getElementById('custom-alert-text').textContent = message;
+                const buttonContainer = document.getElementById('custom-alert-buttons');
+                buttonContainer.innerHTML = `
+                    <button id="custom-alert-cancel" class="btn btn-secondary">Batal</button>
+                    <button id="custom-alert-confirm" class="btn btn-danger">Yakin</button>
+                `;
+                modal.style.display = 'flex';
+                document.getElementById('custom-alert-confirm').onclick = () => {
+                    modal.style.display = 'none';
+                    resolve(true);
+                };
+                document.getElementById('custom-alert-cancel').onclick = () => {
+                    modal.style.display = 'none';
+                    resolve(false);
+                };
+            });
         }
 
         function normalizeUrl(url) {
@@ -559,7 +746,7 @@
         
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
-            loadBackgroundFromLocal();
+            loadBackground();
             function updateClock() {
                 const now = new Date();
                 const hours = String(now.getHours()).padStart(2, '0');
@@ -567,7 +754,7 @@
                 document.getElementById('clock').textContent = `${hours}:${minutes}`;
             }
             updateClock();
-            setInterval(updateClock, 1000 * 60);
+            setInterval(updateClock, 1000 * 30);
             document.getElementById('location-weather').textContent = 'Bandung, Cerah';
             
             function handleSearch(event) {
@@ -591,11 +778,20 @@
             document.getElementById('bg-file-input').addEventListener('change', (e) => handleLocalUpload(e.target.files[0]));
             document.getElementById('edit-bg-online-btn').addEventListener('click', setBackgroundOnline);
             document.getElementById('edit-bg-default-btn').addEventListener('click', restoreDefaultBackground);
+            document.getElementById('open-gallery-btn').addEventListener('click', openBackgroundGallery);
+            document.getElementById('close-gallery-btn').addEventListener('click', () => {
+                document.getElementById('background-modal').style.display = 'none';
+            });
             
             // Settings Modal Listeners
             document.getElementById('open-settings-btn').addEventListener('click', () => openModal('settings'));
             document.getElementById('close-settings-btn').addEventListener('click', () => closeModal('settings'));
-            document.getElementById('reset-background-btn').addEventListener('click', restoreDefaultBackground);
+            document.getElementById('reset-background-btn').addEventListener('click', () => {
+                localStorage.removeItem('dashboardBackgrounds');
+                localStorage.removeItem('currentDashboardBackground');
+                restoreDefaultBackground();
+                showCustomAlert('Latar belakang tersimpan telah dihapus.');
+            });
             document.getElementById('reset-links-btn').addEventListener('click', resetLinksToDefault);
         });
     </script>
